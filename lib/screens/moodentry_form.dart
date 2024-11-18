@@ -154,7 +154,10 @@ class _MoodEntryFormPageState extends State<MoodEntryFormPage> {
                         }
                       }
                     },
-                    child: const Text("Simpan Mood"),
+                    child: const Text(
+                      "Save",
+                      style: TextStyle(color: Colors.white),
+                    )
                   ),
                 ),
               ),
@@ -165,6 +168,7 @@ class _MoodEntryFormPageState extends State<MoodEntryFormPage> {
     );
   }
 }
+
 
 
 
