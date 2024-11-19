@@ -40,18 +40,22 @@ class _MoodEntryPageState extends State<MoodEntryPage> {
       body: FutureBuilder(
         future: fetchMood(request),
         builder: (context, AsyncSnapshot snapshot) {
-          if (snapshot.data == null) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: Text(
+                'Terjadi kesalahan, silakan coba lagi.',
+              ),
+            );
           } else {
-            if (!snapshot.hasData) {
-              return const Column(
-                children: [
-                  Text(
-                    'Belum ada data mood pada mental health tracker.',
-                    style: TextStyle(fontSize: 20, color: Color(0xff59A5D8)),
-                  ),
-                  SizedBox(height: 8),
-                ],
+            if (snapshot.data == null || snapshot.data.isEmpty) {
+              return const Center(
+                child: Text(
+                  'Belum ada data mood pada mental health tracker.',
+                  style: TextStyle(fontSize: 20, color: Color.fromARGB(255, 6, 9, 10)),
+                  textAlign: TextAlign.center,
+                ),
               );
             } else {
               return ListView.builder(
@@ -60,6 +64,18 @@ class _MoodEntryPageState extends State<MoodEntryPage> {
                   margin:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   padding: const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +92,7 @@ class _MoodEntryPageState extends State<MoodEntryPage> {
                       const SizedBox(height: 10),
                       Text("${snapshot.data![index].fields.moodIntensity}"),
                       const SizedBox(height: 10),
-                      Text("${snapshot.data![index].fields.time}")
+                      Text("${snapshot.data![index].fields.time}"),
                     ],
                   ),
                 ),
